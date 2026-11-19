@@ -1,6 +1,8 @@
 # Synthetic Panel — an agentic website
 
-Work in progress for the Open Agentic Web Challenge.
+Built for the Open Agentic Web Challenge. Open the page to score a saved sample run with no
+key, or save two or three versions of your own copy and ask the page's assistant to run the
+panel on them with your own LLM key.
 
 A static website whose agent network compares 2–3 versions of short marketing copy (a
 headline, an email subject line, an offer) with a panel of three synthetic personas, then

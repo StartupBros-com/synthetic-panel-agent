@@ -5,12 +5,15 @@
       "name": "synthetic_panel",
       "front_man": "panel_moderator",
       "hocon": "./synthetic_panel.network.json",
-      "description": "Compare 2-4 versions of a headline, subject line or offer with a panel of three synthetic personas, scored in your browser with Semantic Similarity Rating.",
+      "description": "Compare two or three versions of a headline, subject line or offer with three synthetic personas, scored in your browser with Semantic Similarity Rating.",
       "tags": [
         "agentified-website"
       ],
       "sample_queries": [
-        "Which headline works better: \"Ship your SaaS in a weekend\" or \"Launch faster with fewer bugs\"?"
+        "Which headline works better: \"Track customer requests in one place.\" or \"Turn scattered customer requests into a prioritized product roadmap.\"?",
+        "Compare these email subject lines: \"Your roadmap, minus the guesswork\" and \"3 ways to stop building the wrong features\".",
+        "Run the panel on the versions I saved on the page.",
+        "What conversion rate will this headline get?"
       ]
     }
   ],
@@ -66,6 +69,8 @@
     "module": "./site-actions.js",
     "bridge": "./bridge/action-bridge.html",
     "agentTools": [
+      "get_panel_state",
+      "set_variants",
       "score_reactions"
     ]
   }

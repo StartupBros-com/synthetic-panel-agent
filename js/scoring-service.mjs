@@ -182,11 +182,13 @@ export async function score(args, progress) {
 /**
  * Score the reactions. Returns {result, full, handoff}: result is the compact agent result
  * (or the refusal), full is synthetic-panel's full result shape for the page to render.
+ * load: what loads the model and anchors; the browser default is warmUp. The Node tests
+ * pass one that runs the same model through onnxruntime-node.
  */
-export async function scoreDetailed(args, progress) {
+export async function scoreDetailed(args, progress, load = warmUp) {
   const refused = refusal(args);
   if (refused) return { result: refused, full: null, handoff: null };
-  const { embed, anchors, anchorEmbeddings } = await warmUp(progress);
+  const { embed, anchors, anchorEmbeddings } = await load(progress);
   const handoff = toHandoff(args);
   const full = await scoreReactions(handoff, embed, anchors, undefined, anchorEmbeddings);
   const perReaction = handoff.records.map((rec) => {

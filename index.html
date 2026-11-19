@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Synthetic Panel</title>
+    <meta name="description" content="Compare two or three versions of a headline, subject line or offer with three synthetic personas. Their reactions are scored in your browser with Semantic Similarity Rating.">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="assistant.css">
+    <script type="module" src="js/panel.mjs"></script>
+    <script type="module" src="site.js"></script>
+  </head>
+  <body>
+    <header class="hero">
+      <p class="eyebrow">An agentic website</p>
+      <h1>Synthetic Panel</h1>
+      <p class="lede">Which version of your copy lands better? Three synthetic personas each react to two or three versions of a headline, subject line or offer, and their written reactions are scored in your browser with Semantic Similarity Rating.</p>
+      <p class="lede-small">The ranking compares the versions with each other in one run. It is not a prediction of real conversion or survey results.</p>
+    </header>
+
+    <main>
+      <section id="sample" class="card" aria-labelledby="sample-heading">
+        <h2 id="sample-heading">Try it without a key</h2>
+        <p>Score a saved run: three SaaS headlines, the three personas below, two reactions each. The reactions were written by Claude for synthetic-panel's own sample run on November 7, 2026, one per prompt in its own context. Only the scoring runs here, live in your browser, with no key and no server. The first run downloads the 45 MB scoring model from this site.</p>
+        <button id="sample-button" type="button" class="primary">Score the saved sample run</button>
+        <p id="score-status" class="status" role="status"></p>
+      </section>
+
+      <section id="results" class="card" aria-labelledby="results-heading" hidden>
+        <h2 id="results-heading">Results</h2>
+        <p id="results-source" class="muted"></p>
+        <p id="results-kind"></p>
+        <p id="results-verdict" class="verdict"></p>
+        <h3>Ranking</h3>
+        <div class="table-wrap">
+          <table class="ranking">
+            <thead><tr><th scope="col">Rank</th><th scope="col">Version</th><th scope="col">Copy</th><th scope="col">Score (1–5)</th><th scope="col"><span class="visually-hidden">Bar</span></th></tr></thead>
+            <tbody id="results-ranking"></tbody>
+          </table>
+        </div>
+        <h3>Score by persona</h3>
+        <div class="table-wrap">
+          <table class="personas">
+            <thead id="results-persona-head"></thead>
+            <tbody id="results-personas"></tbody>
+          </table>
+        </div>
+        <h3>Distribution over the 1–5 scale (1 = would pass, 5 = ready to act), averaged over the personas</h3>
+        <div id="results-dists" class="dists"></div>
+        <h3>Every reaction</h3>
+        <div id="results-reactions"></div>
+      </section>
+
+      <section id="versions" class="card" aria-labelledby="versions-heading">
+        <h2 id="versions-heading">Test your own copy</h2>
+        <p>Save two or three versions here, then ask the assistant below to run the panel on them. The interviews run on the AI model and key you choose in the assistant's settings; the scoring still runs in your browser.</p>
+        <form id="versions-form" onsubmit="return false">
+          <label for="stimulus-type">Kind of copy</label>
+          <select id="stimulus-type">
+            <option value="headline">Headline</option>
+            <option value="email_subject">Email subject line</option>
+            <option value="offer">Offer</option>
+            <option value="value_prop">Value proposition</option>
+            <option value="cta">Call to action</option>
+            <option value="price">Price</option>
+            <option value="other">Other short message</option>
+          </select>
+          <label for="context-input">Background (optional, up to 300 characters)</label>
+          <textarea id="context-input" rows="2" maxlength="300" placeholder="Who the page is for, such as: a project tool for small product teams"></textarea>
+          <label for="version-1">Version 1</label>
+          <textarea id="version-1" rows="2" maxlength="600"></textarea>
+          <label for="version-2">Version 2</label>
+          <textarea id="version-2" rows="2" maxlength="600"></textarea>
+          <label for="version-3">Version 3 (optional)</label>
+          <textarea id="version-3" rows="2" maxlength="600"></textarea>
+          <div class="buttons">
+            <button id="ask-panel" type="button" class="primary">Save and ask the panel</button>
+            <button id="save-versions" type="button">Save only</button>
+          </div>
+          <p id="form-status" class="status" role="status"></p>
+        </form>
+      </section>
+
+      <section id="assistant" class="assistant card" aria-labelledby="assistant-heading">
+        <h2 id="assistant-heading">Ask the panel</h2>
+        <p>The moderator interviews Alex, Priya and Jordan once per version, then scores every reaction on this page.</p>
+        <p class="assistant-note">Your messages and the copy you test go to the LLM provider you choose in the settings below. Nothing is sent to this site, which has no server.</p>
+        <p id="assistant-status" role="status">Connecting the assistant… If this message stays, the assistant could not load. You can still use the page directly.</p>
+        <div id="agent-app">
+          <div data-ns-slot="header"></div>
+          <div class="assistant-panels">
+            <div data-ns-slot="chat"></div>
+            <div data-ns-slot="agents"></div>
+          </div>
+          <div data-ns-slot="settings"></div>
+        </div>
+      </section>
+
+      <section id="panel" class="card" aria-labelledby="panel-heading">
+        <h2 id="panel-heading">The panel</h2>
+        <p>The three example personas from synthetic-panel, with their own words as the interview prompt.</p>
+        <ul class="personas-list">
+          <li><strong>Alex Chen</strong>, 34, SaaS founder, Austin, Texas. Married, one child.</li>
+          <li><strong>Priya Nair</strong>, 29, professional skills learner, Chicago, Illinois. Single.</li>
+          <li><strong>Jordan Ellis</strong>, 46, local-services customer, Raleigh, North Carolina. Partnered, two children.</li>
+        </ul>
+      </section>
+
+      <section id="method" class="card" aria-labelledby="method-heading">
+        <h2 id="method-heading">How the scoring works, and its limits</h2>
+        <p>Each reaction is embedded with all-MiniLM-L6-v2 and compared with three sets of five anchor statements, one for each point of a 1–5 scale, from "I would definitely pass on this" (1) to "I would be highly inclined to take the next step soon" (5). In each set the similarities become a probability for each point; the three sets are averaged, and the score is the mean of that distribution. This is Semantic Similarity Rating (SSR), ported from synthetic-panel's Python code and checked against its output: on the saved sample run the browser scores match within 0.0034.</p>
+        <p>The SSR paper (Maier et al., 2025) reports that, on 57 personal-care product surveys with 9,300 human responses, SSR reached 90% of human test-retest reliability with realistic response distributions (KS similarity above 0.85). That was measured with the paper's own anchors, products and models, not with this site's.</p>
+        <p>synthetic-panel's own limits apply here:</p>
+        <blockquote>
+          <p>Results are most reliable as relative comparisons among variants tested in the same run, with the same personas, anchors, embedding model, and temperature settings.</p>
+          <p>v1 reports relative preference signals. Absolute scores are directional.</p>
+          <p>Synthetic responses inherit the strengths and weaknesses of the AI agent that generated them.</p>
+        </blockquote>
+        <p>Other agent sites can call the scorer too: <code>score_reactions</code> is shared through this site's action bridge, and it scores the reactions it is sent in a hidden frame in the visitor's browser.</p>
+      </section>
+    </main>
+
+    <footer class="credits">
+      <p>Scoring method and personas: <a href="https://github.com/StartupBros-com/synthetic-panel">synthetic-panel</a> (MIT). SSR: B. F. Maier et al., <a href="https://arxiv.org/abs/2510.08338">"LLMs Reproduce Human Purchase Intent via Semantic Similarity Elicitation of Likert Ratings"</a>, arXiv:2510.08338, 2025. Agent runtime: <a href="https://github.com/cognizant-ai-labs/agentic-web">cognizant-ai-labs/agentic-web</a> (Apache-2.0). Embedding model: all-MiniLM-L6-v2, ONNX export by Xenova (Apache-2.0). <a href="https://github.com/StartupBros-com/synthetic-panel-agent">Source</a>.</p>
+    </footer>
+  </body>
+</html>
