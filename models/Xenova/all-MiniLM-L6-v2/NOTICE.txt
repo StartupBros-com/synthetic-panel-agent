@@ -1,0 +1,5 @@
+all-MiniLM-L6-v2, ONNX export by Xenova (https://huggingface.co/Xenova/all-MiniLM-L6-v2),
+revision 751bff37182d3f1213fa05d7196b954e230abad9, of sentence-transformers/all-MiniLM-L6-v2
+(https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2). Apache License 2.0; the
+licence text is in LICENSE next to this file. Files unchanged; only onnx/model_fp16.onnx and
+the tokenizer and config files are served.

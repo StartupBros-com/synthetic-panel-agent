@@ -1,0 +1,11 @@
+{
+  "networks": [
+    {
+      "name": "synthetic_panel"
+    }
+  ],
+  "actions": {
+    "version": 1,
+    "module": "./bridge-actions.js"
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "brand": "Synthetic Panel",
+  "networks": [
+    {
+      "name": "synthetic_panel",
+      "front_man": "panel_moderator",
+      "hocon": "./synthetic_panel.network.json",
+      "description": "Compare 2-4 versions of a headline, subject line or offer with a panel of three synthetic personas, scored in your browser with Semantic Similarity Rating.",
+      "tags": [
+        "agentified-website"
+      ],
+      "sample_queries": [
+        "Which headline works better: \"Ship your SaaS in a weekend\" or \"Launch faster with fewer bugs\"?"
+      ]
+    }
+  ],
+  "llm_router": {
+    "base_url": "https://api.otari.ai/api/v1",
+    "mock": false,
+    "byok_router": "https://api.otari.ai/api/v1"
+  },
+  "allowed_peers": [],
+  "peer_policy": {
+    "mode": "closed",
+    "deny_origins": [],
+    "note": "Local agents and page-local actions only. Other sites may call this panel's scorer through its action bridge."
+  },
+  "agent_mcp": {
+    "protocol": "nsdeploy-agent-mcp/v1",
+    "network": "synthetic_panel",
+    "front_man": "panel_moderator",
+    "available": false,
+    "reason": "This is a static bundle; a public MCP facade requires an application host."
+  },
+  "theme": {
+    "primary": "#3b4ea8"
+  },
+  "linking": {
+    "protocol": "nsdeploy-link/v1",
+    "exports": [
+      {
+        "network": "synthetic_panel",
+        "front_man": "panel_moderator",
+        "aliases": [
+          "synthetic_panel",
+          "panel_moderator"
+        ],
+        "url": "synthetic_panel"
+      }
+    ],
+    "imports": [],
+    "link_updates": {
+      "mode": "browser-local"
+    }
+  },
+  "deployment": {
+    "mode": "static",
+    "self_contained_runtime": true,
+    "browser_mock": false,
+    "direct_byok": true,
+    "direct_mcp_requires_cors": true,
+    "public_mcp_facade": false
+  },
+  "actions": {
+    "version": 1,
+    "module": "./site-actions.js",
+    "bridge": "./bridge/action-bridge.html",
+    "agentTools": [
+      "score_reactions"
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "protocol": "nsdeploy-agent-mcp/v1",
+  "network": "synthetic_panel",
+  "front_man": "panel_moderator",
+  "available": false,
+  "reason": "This is a static bundle; a public MCP facade requires an application host."
+}

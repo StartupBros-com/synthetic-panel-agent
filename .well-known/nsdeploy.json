@@ -1,0 +1,18 @@
+{
+  "protocol": "nsdeploy-link/v1",
+  "exports": [
+    {
+      "network": "synthetic_panel",
+      "front_man": "panel_moderator",
+      "aliases": [
+        "synthetic_panel",
+        "panel_moderator"
+      ],
+      "url": "synthetic_panel"
+    }
+  ],
+  "imports": [],
+  "link_updates": {
+    "mode": "browser-local"
+  }
+}
