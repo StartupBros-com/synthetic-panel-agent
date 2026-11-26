@@ -3,7 +3,7 @@
 // model and anchors from this site's origin and scores the reactions it is given.
 // transformers.js is imported on first use, so loading this module costs nothing.
 import { createEmbedder } from "./embedder.mjs";
-import { embedAnchors, scoreReactions, MIN_REACTION_LENGTH } from "./ssr.mjs";
+import { embedAnchors, scoreReactions, InvalidEmbeddingError, MIN_REACTION_LENGTH } from "./ssr.mjs";
 
 const SITE = new URL("../", import.meta.url).href;
 
@@ -190,7 +190,17 @@ export async function scoreDetailed(args, progress, load = warmUp) {
   if (refused) return { result: refused, full: null, handoff: null };
   const { embed, anchors, anchorEmbeddings } = await load(progress);
   const handoff = toHandoff(args);
-  const full = await scoreReactions(handoff, embed, anchors, undefined, anchorEmbeddings);
+  let full;
+  try {
+    full = await scoreReactions(handoff, embed, anchors, undefined, anchorEmbeddings);
+  } catch (error) {
+    if (!(error instanceof InvalidEmbeddingError)) throw error;
+    return {
+      result: { ok: false, reason: "The scoring model returned an invalid embedding. No score was produced." },
+      full: null,
+      handoff: null,
+    };
+  }
   const perReaction = handoff.records.map((rec) => {
     const group = full.per_persona_variant[`${rec.variant_id}:${rec.persona_id}`];
     return {
