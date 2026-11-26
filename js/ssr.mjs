@@ -9,7 +9,12 @@ export const COLLAPSE_SCORE_SPREAD_FLOOR = 0.01;
 export const COLLAPSE_EMBEDDING_DISTANCE_FLOOR = 0.002;
 const LIKERT = [1, 2, 3, 4, 5];
 
+export class InvalidEmbeddingError extends Error {}
+
 export function cosine(a, b) {
+  if (!a?.length || a.length !== b?.length) {
+    throw new InvalidEmbeddingError("Embedding dimensions do not match.");
+  }
   let dot = 0;
   let na = 0;
   let nb = 0;
@@ -18,7 +23,11 @@ export function cosine(a, b) {
     na += a[i] * a[i];
     nb += b[i] * b[i];
   }
-  return dot / (Math.sqrt(na) * Math.sqrt(nb));
+  const norm = Math.sqrt(na) * Math.sqrt(nb);
+  if (!Number.isFinite(dot) || !Number.isFinite(norm) || norm === 0) {
+    throw new InvalidEmbeddingError("Embedding has no finite, nonzero norm.");
+  }
+  return dot / norm;
 }
 
 // Equations 8-9: subtract the minimum similarity, normalize, apply p^(1/T), re-normalize.
